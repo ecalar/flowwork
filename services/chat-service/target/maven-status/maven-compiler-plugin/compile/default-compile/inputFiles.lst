@@ -1,1 +1,5 @@
 /home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/ChatServiceApplication.java
+/home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/model/entity/Message.java
+/home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/model/entity/Room.java
+/home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/repository/MessageRepository.java
+/home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/repository/RoomRepository.java

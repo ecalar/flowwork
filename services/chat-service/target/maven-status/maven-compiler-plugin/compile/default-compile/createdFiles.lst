@@ -1,1 +1,5 @@
+com/flowwork/chatservice/repository/RoomRepository.class
+com/flowwork/chatservice/model/entity/Room.class
 com/flowwork/chatservice/ChatServiceApplication.class
+com/flowwork/chatservice/repository/MessageRepository.class
+com/flowwork/chatservice/model/entity/Message.class
