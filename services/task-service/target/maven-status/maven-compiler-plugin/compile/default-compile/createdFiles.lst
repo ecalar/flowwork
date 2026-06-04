@@ -1,11 +1,14 @@
+com/flowwork/taskservice/config/RabbitMQConfig.class
 com/flowwork/taskservice/model/entity/Project.class
 com/flowwork/taskservice/service/TaskService.class
 com/flowwork/taskservice/dto/ProjectRequest.class
 com/flowwork/taskservice/model/enums/TaskPriority.class
 com/flowwork/taskservice/repository/TaskRepository.class
 com/flowwork/taskservice/controller/ProjectController.class
+com/flowwork/taskservice/dto/TaskEventDto.class
 com/flowwork/taskservice/repository/ProjectRepository.class
 com/flowwork/taskservice/repository/CommentRepository.class
+com/flowwork/taskservice/publisher/TaskEventPublisher.class
 com/flowwork/taskservice/dto/TaskRequest.class
 com/flowwork/taskservice/controller/TaskController.class
 com/flowwork/taskservice/TaskServiceApplication.class
