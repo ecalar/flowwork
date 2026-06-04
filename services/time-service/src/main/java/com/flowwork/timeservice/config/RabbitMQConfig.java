@@ -1,6 +1,7 @@
 package com.flowwork.timeservice.config;
 
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.support.converter.Jackson2JavaTypeMapper;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +15,9 @@ public class RabbitMQConfig {
 
     @Bean
     public MessageConverter jsonMessageConverter() {
-        return new Jackson2JsonMessageConverter();
+        Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter();
+        converter.setTypePrecedence(Jackson2JavaTypeMapper.TypePrecedence.INFERRED);
+        return converter;
     }
 
     @Bean
@@ -24,10 +27,9 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue taskCreatedQueue() {
-        return new Queue(TIME_TASK_CREATED_QUEUE, true);
+        return new Queue(TIME_TASK_CREATED_QUEUE, true); // true = la cola sobrevive reinicios
     }
 
-    // Le decimos a RabbitMQ: "Envíame a esta cola todo lo que tenga la etiqueta 'task.created'"
     @Bean
     public Binding taskCreatedBinding(Queue taskCreatedQueue, TopicExchange flowworkExchange) {
         return BindingBuilder.bind(taskCreatedQueue).to(flowworkExchange).with("task.created");

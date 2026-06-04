@@ -1,1 +1,8 @@
 /home/enrique/IdeaProjects/flowwork/services/time-service/src/main/java/com/flowwork/timeservice/TimeServiceApplication.java
+/home/enrique/IdeaProjects/flowwork/services/time-service/src/main/java/com/flowwork/timeservice/config/RabbitMQConfig.java
+/home/enrique/IdeaProjects/flowwork/services/time-service/src/main/java/com/flowwork/timeservice/controller/TimeController.java
+/home/enrique/IdeaProjects/flowwork/services/time-service/src/main/java/com/flowwork/timeservice/dto/TaskEventDto.java
+/home/enrique/IdeaProjects/flowwork/services/time-service/src/main/java/com/flowwork/timeservice/listener/TaskCreatedListener.java
+/home/enrique/IdeaProjects/flowwork/services/time-service/src/main/java/com/flowwork/timeservice/model/entity/TimeRecord.java
+/home/enrique/IdeaProjects/flowwork/services/time-service/src/main/java/com/flowwork/timeservice/repository/TimeRecordRepository.java
+/home/enrique/IdeaProjects/flowwork/services/time-service/src/main/java/com/flowwork/timeservice/service/TimeService.java

@@ -14,10 +14,9 @@ public class TaskCreatedListener {
         this.timeService = timeService;
     }
 
-    // ¡La Magia Asíncrona!
     @RabbitListener(queues = "time.task.created.queue")
     public void handleTaskCreated(TaskEventDto event) {
-        System.out.println("Time Service recibió evento: Tarea creada ID " + event.taskId() + ". Iniciando cronómetro...");
-        timeService.startTimer(event.taskId());
+        System.out.println("Time Service recibió evento: Tarea creada ID " + event.getTaskId() + ". Iniciando cronómetro...");
+        timeService.startTimer(event.getTaskId());
     }
 }
