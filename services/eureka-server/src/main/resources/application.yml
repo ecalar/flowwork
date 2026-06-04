@@ -1,14 +1,38 @@
 server:
-  port: 8761
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: task-service
+          uri: lb://task-service
+          predicates:
+            - Path=/api/tasks/**
+          filters:
+            - AuthenticationFilter
+        - id: chat-service
+          uri: lb://chat-service
+          predicates:
+            - Path=/api/chat/**, /ws/chat/**
+          filters:
+            - AuthenticationFilter
+        - id: time-service
+          uri: lb://time-service
+          predicates:
+            - Path=/api/time/**
+          filters:
+            - AuthenticationFilter
 
 eureka:
-  instance:
-    hostname: localhost
   client:
-    register-with-eureka: false
-    fetch-registry: false
     service-url:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
-  server:
-    enable-self-preservation: false
-    eviction-interval-timer-in-ms: 5000
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
