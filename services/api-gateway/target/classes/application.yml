@@ -11,18 +11,29 @@ spring:
           enabled: true
           lower-case-service-id: true
       routes:
-        - id: task-service
+        # --- RUTAS DEL TASK SERVICE ---
+        - id: task-service-tasks
           uri: lb://task-service
           predicates:
             - Path=/api/tasks/**
           filters:
             - AuthenticationFilter
+
+        - id: task-service-projects
+          uri: lb://task-service
+          predicates:
+            - Path=/api/projects/**
+          filters:
+            - AuthenticationFilter
+
+        # --- RUTAS DE LOS OTROS SERVICIOS ---
         - id: chat-service
           uri: lb://chat-service
           predicates:
             - Path=/api/chat/**, /ws/chat/**
           filters:
             - AuthenticationFilter
+
         - id: time-service
           uri: lb://time-service
           predicates:

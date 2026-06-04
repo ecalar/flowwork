@@ -1,4 +1,8 @@
 /home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/TaskServiceApplication.java
+/home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/controller/ProjectController.java
+/home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/controller/TaskController.java
+/home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/dto/ProjectRequest.java
+/home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/dto/TaskRequest.java
 /home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/model/entity/Comment.java
 /home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/model/entity/Project.java
 /home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/model/entity/Task.java
@@ -7,3 +11,5 @@
 /home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/repository/CommentRepository.java
 /home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/repository/ProjectRepository.java
 /home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/repository/TaskRepository.java
+/home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/service/ProjectService.java
+/home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/service/TaskService.java

@@ -1,34 +1,23 @@
 server:
-  port: 8080
+  port: 8081
 
 spring:
   application:
-    name: api-gateway
-  cloud:
-    gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
-      routes:
-        - id: task-service
-          uri: lb://task-service
-          predicates:
-            - Path=/api/tasks/**, /api/projects/**
-          filters:
-            - AuthenticationFilter
-        - id: chat-service
-          uri: lb://chat-service
-          predicates:
-            - Path=/api/chat/**, /ws/chat/**
-          filters:
-            - AuthenticationFilter
-        - id: time-service
-          uri: lb://time-service
-          predicates:
-            - Path=/api/time/**
-          filters:
-            - AuthenticationFilter
+    name: task-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/flowwork_tasks
+    username: flowwork
+    password: flowwork
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  rabbitmq:
+    host: localhost
+    port: 5672
 
 eureka:
   client:
