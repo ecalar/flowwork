@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: task-service
+          uri: lb://task-service
+          predicates:
+            - Path=/api/tasks/**
+          filters:
+            - AuthenticationFilter
+        - id: chat-service
+          uri: lb://chat-service
+          predicates:
+            - Path=/api/chat/**, /ws/chat/**
+          filters:
+            - AuthenticationFilter
+        - id: time-service
+          uri: lb://time-service
+          predicates:
+            - Path=/api/time/**
+          filters:
+            - AuthenticationFilter
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
