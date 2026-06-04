@@ -1,1 +1,9 @@
+com/flowwork/taskservice/repository/ProjectRepository.class
+com/flowwork/taskservice/model/entity/Project.class
+com/flowwork/taskservice/repository/CommentRepository.class
 com/flowwork/taskservice/TaskServiceApplication.class
+com/flowwork/taskservice/model/entity/Comment.class
+com/flowwork/taskservice/model/enums/TaskPriority.class
+com/flowwork/taskservice/repository/TaskRepository.class
+com/flowwork/taskservice/model/entity/Task.class
+com/flowwork/taskservice/model/enums/TaskStatus.class
