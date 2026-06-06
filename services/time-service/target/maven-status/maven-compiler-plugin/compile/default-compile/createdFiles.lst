@@ -1,7 +1,8 @@
+com/flowwork/timeservice/repository/TimeEntryRepository.class
 com/flowwork/timeservice/TimeServiceApplication.class
 com/flowwork/timeservice/repository/TimeRecordRepository.class
+com/flowwork/timeservice/model/TimeEntry.class
 com/flowwork/timeservice/service/TimeService.class
-com/flowwork/timeservice/listener/TaskCreatedListener.class
 com/flowwork/timeservice/controller/TimeController.class
 com/flowwork/timeservice/model/entity/TimeRecord.class
 com/flowwork/timeservice/config/RabbitMQConfig.class

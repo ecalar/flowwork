@@ -1,10 +1,8 @@
 package com.flowwork.timeservice.service;
 
-import com.flowwork.timeservice.model.entity.TimeRecord;
-import com.flowwork.timeservice.repository.TimeRecordRepository;
+import com.flowwork.timeservice.model.TimeEntry;
+import com.flowwork.timeservice.repository.TimeEntryRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,37 +10,44 @@ import java.util.List;
 @Service
 public class TimeService {
 
-    private final TimeRecordRepository timeRecordRepository;
+    private final TimeEntryRepository entryRepository;
 
-    public TimeService(TimeRecordRepository timeRecordRepository) {
-        this.timeRecordRepository = timeRecordRepository;
+    public TimeService(TimeEntryRepository entryRepository) {
+        this.entryRepository = entryRepository;
     }
 
-    @Transactional
-    public TimeRecord startTimer(Long taskId) {
-        // Evitamos crear múltiples cronómetros para la misma tarea si ya hay uno corriendo
-        if (timeRecordRepository.findByTaskIdAndEndTimeIsNull(taskId).isPresent()) {
-            throw new RuntimeException("Ya hay un temporizador activo para la tarea " + taskId);
+    public TimeEntry startTimer(Long taskId, String userId, Long projectId, String description) {
+        TimeEntry activeTimer = entryRepository.findFirstByUserIdAndEndTimeIsNull(userId);
+        if (activeTimer != null) {
+            throw new RuntimeException("Ya tienes un temporizador activo. Detenlo antes de iniciar otro.");
         }
-        TimeRecord record = new TimeRecord(taskId, LocalDateTime.now());
-        return timeRecordRepository.save(record);
+
+        TimeEntry newEntry = new TimeEntry();
+        newEntry.setTaskId(taskId);
+        newEntry.setUserId(userId);
+        newEntry.setProjectId(projectId);
+        newEntry.setStartTime(LocalDateTime.now());
+        newEntry.setDescription(description);
+        return entryRepository.save(newEntry);
     }
 
-    @Transactional
-    public TimeRecord stopTimer(Long taskId) {
-        TimeRecord record = timeRecordRepository.findByTaskIdAndEndTimeIsNull(taskId)
-                .orElseThrow(() -> new RuntimeException("No hay un temporizador activo para la tarea " + taskId));
+    public TimeEntry stopTimer(String userId) {
+        TimeEntry activeEntry = entryRepository.findFirstByUserIdAndEndTimeIsNull(userId);
+        if (activeEntry == null) {
+            throw new RuntimeException("No tienes un temporizador activo.");
+        }
 
-        record.setEndTime(LocalDateTime.now());
-
-        // Calcular los minutos transcurridos
-        long minutes = Duration.between(record.getStartTime(), record.getEndTime()).toMinutes();
-        record.setTotalMinutes(minutes);
-
-        return timeRecordRepository.save(record);
+        activeEntry.setEndTime(LocalDateTime.now());
+        long minutes = Duration.between(activeEntry.getStartTime(), activeEntry.getEndTime()).toMinutes();
+        activeEntry.setDurationMinutes(minutes);
+        return entryRepository.save(activeEntry);
     }
 
-    public List<TimeRecord> getRecordsByTask(Long taskId) {
-        return timeRecordRepository.findByTaskId(taskId);
+    public List<TimeEntry> getUserEntries(String userId) {
+        return entryRepository.findByUserIdOrderByStartTimeDesc(userId);
+    }
+
+    public List<TimeEntry> getProjectEntries(Long projectId) {
+        return entryRepository.findByTaskIdOrderByStartTimeDesc(projectId);
     }
 }

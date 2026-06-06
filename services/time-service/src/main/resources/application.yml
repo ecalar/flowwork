@@ -5,21 +5,14 @@ spring:
   application:
     name: time-service
   datasource:
-    # Por simplicidad en desarrollo, usamos la misma base de datos del task-service.
-    # En producción (FCT), cada servicio tendría su propia URL.
-    url: jdbc:postgresql://localhost:5432/flowwork_tasks
+    url: jdbc:postgresql://localhost:5434/flowwork_time
     username: flowwork
     password: flowwork
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-  rabbitmq:
-    host: localhost
-    port: 5672
 
 eureka:
   client:
