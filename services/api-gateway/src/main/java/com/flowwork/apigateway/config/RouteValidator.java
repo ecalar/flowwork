@@ -11,7 +11,8 @@ public class RouteValidator {
     // Lista de endpoints que no requieren token
     public static final List<String> openApiEndpoints = List.of(
             "/api/auth/login",
-            "/eureka"
+            "/eureka",
+            "/ws-chat"
     );
 
     public Predicate<ServerHttpRequest> isSecured =

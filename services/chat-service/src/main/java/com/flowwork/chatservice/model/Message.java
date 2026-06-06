@@ -1,4 +1,4 @@
-package com.flowwork.chatservice.model.entity;
+package com.flowwork.chatservice.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -11,43 +11,40 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 1000)
+    @Column(nullable = false)
     private String content;
 
-    // Relación con la sala de chat
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id", nullable = false)
-    private Room room;
+    @Column(name = "room_id", nullable = false)
+    private Long roomId;
 
     @Column(name = "sender_id", nullable = false)
     private String senderId;
 
-    @Column(updatable = false)
+    @Column(nullable = false)
     private LocalDateTime timestamp;
 
-    @PrePersist
-    protected void onCreate() {
-        this.timestamp = LocalDateTime.now();
-    }
-
-    // Constructores
     public Message() {}
 
-    public Message(String content, Room room, String senderId) {
+    public Message(String content, Long roomId, String senderId, LocalDateTime timestamp) {
         this.content = content;
-        this.room = room;
+        this.roomId = roomId;
         this.senderId = senderId;
+        this.timestamp = timestamp;
     }
 
     // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
-    public Room getRoom() { return room; }
-    public void setRoom(Room room) { this.room = room; }
+
+    public Long getRoomId() { return roomId; }
+    public void setRoomId(Long roomId) { this.roomId = roomId; }
+
     public String getSenderId() { return senderId; }
     public void setSenderId(String senderId) { this.senderId = senderId; }
+
     public LocalDateTime getTimestamp() { return timestamp; }
     public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
 }

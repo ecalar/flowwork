@@ -1,5 +1,6 @@
 /home/enrique/IdeaProjects/flowwork/services/api-gateway/src/main/java/com/flowwork/apigateway/ApiGatewayApplication.java
+/home/enrique/IdeaProjects/flowwork/services/api-gateway/src/main/java/com/flowwork/apigateway/config/CorsConfig.java
 /home/enrique/IdeaProjects/flowwork/services/api-gateway/src/main/java/com/flowwork/apigateway/config/RouteValidator.java
 /home/enrique/IdeaProjects/flowwork/services/api-gateway/src/main/java/com/flowwork/apigateway/controller/AuthController.java
-/home/enrique/IdeaProjects/flowwork/services/api-gateway/src/main/java/com/flowwork/apigateway/filter/AuthenticationFilter.java
+/home/enrique/IdeaProjects/flowwork/services/api-gateway/src/main/java/com/flowwork/apigateway/filter/AuthenticationGatewayFilterFactory.java
 /home/enrique/IdeaProjects/flowwork/services/api-gateway/src/main/java/com/flowwork/apigateway/util/JwtUtil.java

@@ -1,35 +1,41 @@
 package com.flowwork.chatservice.controller;
 
-import com.flowwork.chatservice.dto.ChatMessagePayload;
-import com.flowwork.chatservice.model.entity.Message;
-import com.flowwork.chatservice.publisher.ChatEventPublisher;
-import com.flowwork.chatservice.service.ChatService;
+import com.flowwork.chatservice.model.Message;
+import com.flowwork.chatservice.service.MessageService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDateTime;
+
 @Controller
 public class ChatWebSocketController {
 
-    private final ChatService chatService;
     private final SimpMessagingTemplate messagingTemplate;
-    private final ChatEventPublisher chatEventPublisher; // <-- Nuevo
+    private final MessageService messageService;
+    private final RabbitTemplate rabbitTemplate;
 
-    public ChatWebSocketController(ChatService chatService, SimpMessagingTemplate messagingTemplate, ChatEventPublisher chatEventPublisher) {
-        this.chatService = chatService;
+    public ChatWebSocketController(SimpMessagingTemplate messagingTemplate,
+                                   MessageService messageService,
+                                   RabbitTemplate rabbitTemplate) {
         this.messagingTemplate = messagingTemplate;
-        this.chatEventPublisher = chatEventPublisher;
+        this.messageService = messageService;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @MessageMapping("/chat.sendMessage")
-    public void sendMessage(@Payload ChatMessagePayload payload) {
-        Message savedMessage = chatService.saveMessage(payload.content(), payload.roomId(), payload.senderId());
+    public void sendMessage(@Payload Message message) {
+        message.setTimestamp(LocalDateTime.now());
 
-        // 1. Enviar por WebSocket a los usuarios conectados
-        messagingTemplate.convertAndSend("/topic/rooms/" + payload.roomId(), savedMessage);
+        // 1. Guardar en base de datos
+        Message savedMessage = messageService.saveMessage(message);
 
-        // 2. Notificar a RabbitMQ para que otros microservicios lo sepan
-        chatEventPublisher.publishChatMessageSent(savedMessage.getId(), savedMessage.getContent(), savedMessage.getRoom().getId());
+        // 2. Enviar a los suscriptores
+        messagingTemplate.convertAndSend("/topic/rooms/" + message.getRoomId(), savedMessage);
+
+        // 3. Publicar a RabbitMQ
+        rabbitTemplate.convertAndSend("chat.exchange", "chat.message.sent", savedMessage);
     }
 }

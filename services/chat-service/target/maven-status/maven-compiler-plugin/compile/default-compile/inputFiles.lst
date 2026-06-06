@@ -1,5 +1,6 @@
 /home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/ChatServiceApplication.java
 /home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/config/RabbitMQConfig.java
+/home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/config/SecurityConfig.java
 /home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/config/WebSocketConfig.java
 /home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/controller/ChatWebSocketController.java
 /home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/controller/RoomController.java
@@ -7,10 +8,9 @@
 /home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/dto/ChatMessagePayload.java
 /home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/dto/RoomRequest.java
 /home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/dto/TaskCompletedEventDto.java
-/home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/listener/TaskEventListener.java
-/home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/model/entity/Message.java
+/home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/model/Message.java
 /home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/model/entity/Room.java
 /home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/publisher/ChatEventPublisher.java
 /home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/repository/MessageRepository.java
 /home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/repository/RoomRepository.java
-/home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/service/ChatService.java
+/home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/service/MessageService.java

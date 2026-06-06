@@ -13,14 +13,13 @@ spring:
             allowedMethods: "GET,POST,PUT,DELETE,OPTIONS"
             allowedHeaders: "*"
             allowCredentials: true
-            # Esto es vital: controla cuánto tiempo el navegador guarda la política CORS
             maxAge: 3600
       routes:
         # --- RUTAS DEL TASK SERVICE ---
         - id: task-service
           uri: lb://task-service
           predicates:
-              - Path=/api/tasks/**
+            - Path=/api/tasks/**
           filters:
             - Authentication
 
@@ -42,7 +41,7 @@ spring:
         - id: chat-websocket
           uri: lb://chat-service
           predicates:
-              - Path=/ws-chat/**
+            - Path=/ws-chat/**
 
         - id: time-service
           uri: lb://time-service
@@ -50,8 +49,6 @@ spring:
             - Path=/api/time/**
           filters:
             - Authentication
-
-
 
 eureka:
   client:
