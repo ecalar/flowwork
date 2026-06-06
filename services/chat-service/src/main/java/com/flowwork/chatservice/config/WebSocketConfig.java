@@ -1,10 +1,20 @@
 package com.flowwork.chatservice.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.messaging.simp.stomp.StompCommand;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.messaging.support.ChannelInterceptor;
+import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
+import java.util.Base64;
+import java.util.List;
 
 @Configuration
 @EnableWebSocketMessageBroker
@@ -19,9 +29,60 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-chat")
-                .setAllowedOriginPatterns("*")
+                .setAllowedOrigins("http://localhost:5173")
                 .withSockJS();
     }
 
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(new ChannelInterceptor() {
+            @Override
+            public Message<?> preSend(Message<?> message, MessageChannel channel) {
+                StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
+                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
+                    List<String> authHeaders = accessor.getNativeHeader("token");
+
+                    if (authHeaders != null && !authHeaders.isEmpty()) {
+                        String token = authHeaders.get(0);
+                        try {
+                            // Decodificar el payload del JWT sin validar la firma
+                            String[] parts = token.split("\\.");
+                            if (parts.length == 3) {
+                                String payload = new String(Base64.getUrlDecoder().decode(parts[1]));
+                                System.out.println("✅ WebSocket conectado. Payload: " + payload);
+
+                                // Extraer el subject manualmente (campo "sub")
+                                String username = extractJsonField(payload, "sub");
+                                if (username != null && !username.isEmpty()) {
+                                    accessor.setUser(() -> username);
+                                } else {
+                                    throw new IllegalArgumentException("Token sin subject");
+                                }
+                            } else {
+                                throw new IllegalArgumentException("Formato de token inválido");
+                            }
+                        } catch (Exception e) {
+                            System.err.println("❌ Error al procesar token: " + e.getMessage());
+                            throw new IllegalArgumentException("Token inválido");
+                        }
+                    } else {
+                        System.err.println("❌ Intento de conexión WebSocket sin token");
+                        throw new IllegalArgumentException("Token no proporcionado");
+                    }
+                }
+                return message;
+            }
+
+            private String extractJsonField(String json, String field) {
+                String search = "\"" + field + "\":\"";
+                int start = json.indexOf(search);
+                if (start == -1) return null;
+                start += search.length();
+                int end = json.indexOf("\"", start);
+                if (end == -1) return null;
+                return json.substring(start, end);
+            }
+        });
+    }
 }
