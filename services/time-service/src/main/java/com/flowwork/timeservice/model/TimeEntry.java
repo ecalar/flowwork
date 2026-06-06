@@ -29,8 +29,8 @@ public class TimeEntry {
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
-    @Column(name = "duration_minutes")
-    private Long durationMinutes;
+    @Column(name = "duration_seconds")
+    private Long durationSeconds;
 
     @Column(columnDefinition = "TEXT")
     private String description;

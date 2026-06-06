@@ -1,16 +1,17 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import Timer from '../components/Timer';
 
 export default function MainLayout() {
   const location = useLocation();
-  const navigate = useNavigate(); // Inicializamos el hook aquí
+  const navigate = useNavigate();
 
   const navItems = [
     { name: 'Dashboard', path: '/' },
     { name: 'Tareas', path: '/tasks' },
     { name: 'Sala de Chat', path: '/chat' },
+    { name: 'Reportes', path: '/time-reports' },
   ];
 
-  // Función para borrar el token y salir
   const handleLogout = () => {
     localStorage.removeItem('flowwork_token');
     navigate('/login');
@@ -62,6 +63,9 @@ export default function MainLayout() {
       <main className="flex-1 p-8 overflow-y-auto">
         <Outlet />
       </main>
+
+      {/* Timer flotante */}
+      <Timer taskId={1} projectId={1} />
     </div>
   );
 }

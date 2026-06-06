@@ -38,8 +38,8 @@ public class TimeService {
         }
 
         activeEntry.setEndTime(LocalDateTime.now());
-        long minutes = Duration.between(activeEntry.getStartTime(), activeEntry.getEndTime()).toMinutes();
-        activeEntry.setDurationMinutes(minutes);
+        long seconds = Duration.between(activeEntry.getStartTime(), activeEntry.getEndTime()).getSeconds();
+        activeEntry.setDurationSeconds(seconds);
         return entryRepository.save(activeEntry);
     }
 
