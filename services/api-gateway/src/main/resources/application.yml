@@ -1,62 +1,55 @@
 server:
-  port: 8080
+  port: 8084
 
 spring:
   application:
     name: api-gateway
   cloud:
     gateway:
-      spring:
-        cloud:
-          gateway:
-            globalcors:
-              cors-configurations:
-                '[/**]':
-                  allowedOrigins: "http://localhost:5173"
-                  allowedMethods: "*"
-                  allowedHeaders: "*"
-                  allowCredentials: true
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:5173"
+            allowedMethods: "GET,POST,PUT,DELETE,OPTIONS"
+            allowedHeaders: "*"
+            allowCredentials: true
+            # Esto es vital: controla cuánto tiempo el navegador guarda la política CORS
+            maxAge: 3600
       routes:
         # --- RUTAS DEL TASK SERVICE ---
-        - id: task-service-tasks
+        - id: task-service
           uri: lb://task-service
           predicates:
-            - Path=/api/tasks/**
+              - Path=/api/tasks/**
           filters:
-            - AuthenticationFilter
+            - Authentication
 
         - id: task-service-projects
           uri: lb://task-service
           predicates:
             - Path=/api/projects/**
           filters:
-            - AuthenticationFilter
+            - Authentication
 
         # --- RUTAS DE LOS OTROS SERVICIOS ---
-        - id: chat-service
+        - id: chat-service-api
           uri: lb://chat-service
           predicates:
-            - Path=/api/chat/**, /ws/chat/**
+            - Path=/api/chat/**
           filters:
-            - AuthenticationFilter
-
+            - Authentication
 
         - id: chat-websocket
-          uri: lb://CHAT-SERVICE
+          uri: lb://chat-service
           predicates:
               - Path=/ws-chat/**
-
 
         - id: time-service
           uri: lb://time-service
           predicates:
             - Path=/api/time/**
           filters:
-            - AuthenticationFilter
+            - Authentication
 
 
 

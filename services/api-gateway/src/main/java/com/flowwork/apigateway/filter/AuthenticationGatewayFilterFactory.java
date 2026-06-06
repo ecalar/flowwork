@@ -10,49 +10,50 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
+public class AuthenticationGatewayFilterFactory extends AbstractGatewayFilterFactory<AuthenticationGatewayFilterFactory.Config> {
 
     @Autowired
     private RouteValidator validator;
-
     @Autowired
     private JwtUtil jwtUtil;
 
-    public AuthenticationFilter() {
+    public AuthenticationGatewayFilterFactory() {
         super(Config.class);
     }
+
+    public static class Config { }
 
     @Override
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
+            String path = exchange.getRequest().getURI().getPath();
+
+
+            if (path.contains("/ws-chat/")) {
+                return chain.filter(exchange);
+            }
+
             if (validator.isSecured.test(exchange.getRequest())) {
-                // 1. Verificar si existe el header Authorization
-                if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
+                String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+
+                if (authHeader == null && exchange.getRequest().getQueryParams().containsKey("token")) {
+                    authHeader = "Bearer " + exchange.getRequest().getQueryParams().getFirst("token");
+                }
+
+                if (authHeader == null || !authHeader.startsWith("Bearer ")) {
                     exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                     return exchange.getResponse().setComplete();
                 }
 
-                // 2. Extraer el token (quitando "Bearer ")
-                String authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
-                if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                    authHeader = authHeader.substring(7);
-                } else {
-                    exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                    return exchange.getResponse().setComplete();
-                }
-
-                // 3. Validar el token
                 try {
-                    jwtUtil.validateToken(authHeader);
+                    jwtUtil.validateToken(authHeader.substring(7));
                 } catch (Exception e) {
+                    System.err.println("❌ Error en JWT: " + e.getMessage());
                     exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
                     return exchange.getResponse().setComplete();
                 }
             }
             return chain.filter(exchange);
         });
-    }
-
-    public static class Config {
     }
 }
