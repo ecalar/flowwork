@@ -17,7 +17,7 @@ spring:
       routes:
         # --- RUTAS DEL TASK SERVICE ---
         - id: task-service
-          uri: lb://task-service
+          uri: lb://TASK-SERVICE
           predicates:
             - Path=/api/tasks/**
           filters:
