@@ -16,7 +16,7 @@ const PrivateRoute = ({ children }) => {
 function App() {
   return (
     <ToastProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="/flowwork">
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route
