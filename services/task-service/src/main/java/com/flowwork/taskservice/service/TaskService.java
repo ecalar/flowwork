@@ -56,6 +56,7 @@ public class TaskService {
         task.setDescription(updatedTask.getDescription());
         task.setPriority(updatedTask.getPriority());
         task.setAssigneeId(updatedTask.getAssigneeId());
+        task.setStatus(updatedTask.getStatus()); // Añadir esta linea
         return taskRepository.save(task);
     }
 
