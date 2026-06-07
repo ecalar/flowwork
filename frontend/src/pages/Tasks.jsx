@@ -68,7 +68,7 @@ export default function Tasks() {
         ...task,
         status: 'IN_PROGRESS',
         projectId: task.projectId || 1,
-        assigneeId: task.assigneeId || 'Enrique',
+        assigneeId: task.assigneeId || localStorage.getItem('flowwork_username') || 'Enrique',
         priority: task.priority || 'MEDIUM',
         dueDate: task.dueDate || new Date().toISOString().split('T')[0]
       });
@@ -91,7 +91,7 @@ export default function Tasks() {
         ...task,
         status: 'TODO',
         projectId: task.projectId || 1,
-        assigneeId: task.assigneeId || 'Enrique',
+        assigneeId: editingTask.assigneeId || localStorage.getItem('flowwork_username') || 'Enrique',
         priority: task.priority || 'MEDIUM',
         dueDate: task.dueDate || new Date().toISOString().split('T')[0]
       });
@@ -133,7 +133,7 @@ export default function Tasks() {
           title: newTask.title,
           description: newTask.description,
           projectId: editingTask.projectId || 1,
-          assigneeId: editingTask.assigneeId || 'Enrique',
+          assigneeId: localStorage.getItem('flowwork_username') || 'Enrique',
           priority: newTask.priority,
           status: editingTask.status || 'TODO',
           dueDate: newTask.dueDate || new Date().toISOString().split('T')[0]
@@ -143,7 +143,7 @@ export default function Tasks() {
           title: newTask.title,
           description: newTask.description,
           projectId: 1,
-          assigneeId: 'Enrique',
+          assigneeId: localStorage.getItem('flowwork_username') || 'Enrique',
           priority: newTask.priority,
           status: 'TODO',
           dueDate: newTask.dueDate || new Date().toISOString().split('T')[0]

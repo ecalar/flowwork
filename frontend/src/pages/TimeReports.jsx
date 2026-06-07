@@ -22,7 +22,8 @@ export default function TimeReports() {
   const loadEntries = useCallback(async () => {
       setLoading(true);
       try {
-        const response = await api.get('/time/entries/Enrique');
+        const username = localStorage.getItem('flowwork_username') || 'Enrique';
+        const response = await api.get(`/time/entries/${username}`);
         setEntries(response.data);
       } catch (err) {
         console.error('Error cargando reportes:', err);

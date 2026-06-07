@@ -97,7 +97,7 @@ export default function Chat() {
         body: JSON.stringify({
           content: input.trim(),
           roomId: parseInt(currentTaskId),
-          senderId: 'Enrique',
+          senderId: localStorage.getItem('flowwork_username') || 'Enrique',
         }),
       });
       addToast('Mensaje enviado', 'info');
@@ -139,7 +139,8 @@ export default function Chat() {
             </div>
           )}
           {messages.map((msg, index) => {
-            const isMe = msg.senderId === 'Enrique';
+              const currentUser = localStorage.getItem('flowwork_username') || 'Enrique';
+              const isMe = msg.senderId === currentUser;
             const isSystem = msg.senderId === 'SYSTEM';
             if (isSystem) {
               return (

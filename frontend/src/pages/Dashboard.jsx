@@ -23,7 +23,8 @@ export default function Dashboard() {
       // Tiempo
       let totalSeconds = 0;
       try {
-        const timeRes = await api.get('/time/entries/Enrique');
+        const username = localStorage.getItem('flowwork_username') || 'Enrique';
+        const timeRes = await api.get(`/time/entries/${username}`);
         const timeData = timeRes.data;
         totalSeconds = timeData.reduce((sum, entry) => sum + (entry.durationSeconds || 0), 0);
       } catch (err) {

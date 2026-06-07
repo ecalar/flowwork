@@ -63,7 +63,7 @@ export default function Timer() {
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({
           taskId: currentTaskId,
-          userId: 'Enrique',
+          userId: localStorage.getItem('flowwork_username') || 'Enrique',
           projectId: 1,
           description: 'Trabajando en la tarea'
         })
