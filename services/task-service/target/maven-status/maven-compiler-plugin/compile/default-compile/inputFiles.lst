@@ -2,6 +2,7 @@
 /home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/config/RabbitMQConfig.java
 /home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/controller/ProjectController.java
 /home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/controller/TaskController.java
+/home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/dto/CreateTaskRequest.java
 /home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/dto/ProjectRequest.java
 /home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/dto/TaskEventDto.java
 /home/enrique/IdeaProjects/flowwork/services/task-service/src/main/java/com/flowwork/taskservice/dto/TaskRequest.java

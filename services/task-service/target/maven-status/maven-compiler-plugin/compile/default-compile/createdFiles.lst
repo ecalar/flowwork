@@ -1,4 +1,5 @@
 com/flowwork/taskservice/config/RabbitMQConfig.class
+com/flowwork/taskservice/dto/CreateTaskRequest.class
 com/flowwork/taskservice/model/entity/Project.class
 com/flowwork/taskservice/service/TaskService.class
 com/flowwork/taskservice/dto/ProjectRequest.class

@@ -20,6 +20,13 @@ public class TaskEventPublisher {
                 RabbitMQConfig.TASK_CREATED_ROUTING_KEY,
                 event
         );
-        System.out.println("Evento emitido a RabbitMQ: [task.created] para la tarea ID " + event.taskId());
+    }
+
+    public void publishTaskCompletedEvent(Long taskId) {
+        rabbitTemplate.convertAndSend(
+                RabbitMQConfig.EXCHANGE_NAME,
+                RabbitMQConfig.TASK_COMPLETED_ROUTING_KEY,
+                taskId.toString()
+        );
     }
 }

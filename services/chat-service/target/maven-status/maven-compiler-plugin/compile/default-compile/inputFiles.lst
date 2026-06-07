@@ -14,3 +14,4 @@
 /home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/repository/MessageRepository.java
 /home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/repository/RoomRepository.java
 /home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/service/MessageService.java
+/home/enrique/IdeaProjects/flowwork/services/chat-service/src/main/java/com/flowwork/chatservice/service/RoomService.java

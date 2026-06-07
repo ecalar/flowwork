@@ -40,8 +40,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
+                System.out.println("📨 Comando STOMP recibido: " + accessor.getCommand());
+                System.out.println("   Destino: " + accessor.getDestination());
+
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {
                     List<String> authHeaders = accessor.getNativeHeader("token");
+
 
                     if (authHeaders != null && !authHeaders.isEmpty()) {
                         String token = authHeaders.get(0);

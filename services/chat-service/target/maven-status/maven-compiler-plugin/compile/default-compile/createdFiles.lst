@@ -5,9 +5,10 @@ com/flowwork/chatservice/ChatServiceApplication.class
 com/flowwork/chatservice/dto/TaskCompletedEventDto.class
 com/flowwork/chatservice/dto/ChatMessageEventDto.class
 com/flowwork/chatservice/config/SecurityConfig.class
-com/flowwork/chatservice/model/entity/Room.class
+com/flowwork/chatservice/model/Room.class
 com/flowwork/chatservice/config/WebSocketConfig.class
 com/flowwork/chatservice/config/WebSocketConfig$1.class
+com/flowwork/chatservice/service/RoomService.class
 com/flowwork/chatservice/repository/MessageRepository.class
 com/flowwork/chatservice/controller/RoomController.class
 com/flowwork/chatservice/model/Message.class

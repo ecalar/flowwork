@@ -1,14 +1,10 @@
 package com.flowwork.taskservice.controller;
 
-import com.flowwork.taskservice.dto.TaskRequest;
 import com.flowwork.taskservice.model.entity.Task;
-import com.flowwork.taskservice.model.enums.TaskPriority;
-import com.flowwork.taskservice.model.enums.TaskStatus;
 import com.flowwork.taskservice.service.TaskService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import com.flowwork.taskservice.dto.CreateTaskRequest;
 import java.util.List;
 
 @RestController
@@ -21,29 +17,34 @@ public class TaskController {
         this.taskService = taskService;
     }
 
+    @GetMapping("/project/{projectId}")
+    public List<Task> getTasksByProject(@PathVariable Long projectId) {
+        return taskService.getTasksByProject(projectId);
+    }
+
+    @GetMapping("/{id}")
+    public Task getTask(@PathVariable Long id) {
+        return taskService.getTaskById(id);
+    }
+
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody TaskRequest request) {
-        Task task = new Task();
-        task.setTitle(request.title());
-        task.setDescription(request.description());
-        task.setPriority(TaskPriority.valueOf(request.priority().toUpperCase()));
-        task.setAssigneeId(request.assigneeId());
-        task.setDueDate(request.dueDate());
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(taskService.createTask(task, request.projectId()));
+    public Task createTask(@RequestBody CreateTaskRequest request) {
+        return taskService.createTask(request);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Task>> getTasksByProject(@RequestParam Long projectId) {
-        return ResponseEntity.ok(taskService.getTasksByProjectId(projectId));
+    @PutMapping("/{id}")
+    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task task) {
+        return ResponseEntity.ok(taskService.updateTask(id, task));
     }
 
-    @PutMapping("/{id}/status")
-    public ResponseEntity<Task> updateTaskStatus(
-            @PathVariable Long id,
-            @RequestParam String status) {
-        TaskStatus newStatus = TaskStatus.valueOf(status.toUpperCase());
-        return ResponseEntity.ok(taskService.updateTaskStatus(id, newStatus));
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        taskService.deleteTask(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/complete")
+    public ResponseEntity<Task> completeTask(@PathVariable Long id) {
+        return ResponseEntity.ok(taskService.completeTask(id));
     }
 }

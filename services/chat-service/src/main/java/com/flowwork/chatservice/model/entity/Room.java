@@ -1,4 +1,4 @@
-package com.flowwork.chatservice.model.entity;
+package com.flowwork.chatservice.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -8,32 +8,25 @@ import java.time.LocalDateTime;
 public class Room {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(name = "project_id", nullable = false)
+    @Column(name = "project_id")
     private Long projectId;
 
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @PrePersist
-    protected void onCreate() {
+    public Room() {}
+
+    public Room(Long id, String name) {
+        this.id = id;
+        this.name = name;
         this.createdAt = LocalDateTime.now();
     }
 
-    // Constructores
-    public Room() {}
-
-    public Room(String name, Long projectId) {
-        this.name = name;
-        this.projectId = projectId;
-    }
-
-    // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getName() { return name; }
