@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useToast } from '../context/ToastContext';
 
 export default function Timer() {
   const [isRunning, setIsRunning] = useState(false);
@@ -6,13 +7,13 @@ export default function Timer() {
   const [elapsed, setElapsed] = useState(0);
   const [taskId, setTaskId] = useState(() => localStorage.getItem('selectedTaskId') || null);
 
-  // Escuchar cambios en la tarea seleccionada
+  const { addToast } = useToast();
+
   useEffect(() => {
     const checkTask = () => {
       const currentTaskId = localStorage.getItem('selectedTaskId') || null;
       setTaskId(prevTaskId => {
         if (currentTaskId !== prevTaskId) {
-          // Si la tarea cambió, detener el temporizador automáticamente
           if (isRunning) {
             setIsRunning(false);
             setElapsed(0);
@@ -23,13 +24,9 @@ export default function Timer() {
       });
     };
 
-    // Comprobar cada segundo
     const interval = setInterval(checkTask, 1000);
-
-    // Escuchar evento storage
     window.addEventListener('storage', checkTask);
     window.addEventListener('focus', checkTask);
-    window.addEventListener('taskChanged', checkTask);
 
     return () => {
       clearInterval(interval);
@@ -38,7 +35,6 @@ export default function Timer() {
     };
   }, [isRunning]);
 
-  // Efecto para actualizar el cronómetro cada segundo
   useEffect(() => {
     let interval;
     if (isRunning) {
@@ -74,6 +70,7 @@ export default function Timer() {
       });
       setIsRunning(true);
       setStartTime(Date.now());
+      addToast('Temporizador iniciado', 'info');
     } catch (error) { console.error('Error al iniciar timer:', error); }
   };
 
@@ -88,13 +85,14 @@ export default function Timer() {
       setIsRunning(false);
       setElapsed(0);
       window.dispatchEvent(new CustomEvent('timer-stopped'));
+      addToast('Temporizador detenido', 'warning');
     } catch (error) { console.error('Error al detener timer:', error); }
   };
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 w-full animate-fade-in">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="font-bold text-slate-800 text-sm">⏱️ Temporizador</h3>
+        <h3 className="font-bold text-slate-800 text-sm">Temporizador</h3>
         <span className={`w-2 h-2 rounded-full ${isRunning ? 'bg-green-500 animate-pulse' : 'bg-slate-300'}`} />
       </div>
       <div className="text-2xl font-mono font-bold text-center text-slate-800 mb-3">

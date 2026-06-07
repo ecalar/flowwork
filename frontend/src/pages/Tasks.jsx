@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { api } from '../services/api';
 import KanbanBoard from '../components/KanbanBoard';
+import { useToast } from '../context/ToastContext';
 
 export default function Tasks() {
   const [tasks, setTasks] = useState([]);
@@ -20,6 +21,8 @@ export default function Tasks() {
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [priorityFilter, setPriorityFilter] = useState('ALL');
   const [viewMode, setViewMode] = useState('grid');
+
+  const { addToast } = useToast();
 
   useEffect(() => {
     loadTasks();
@@ -74,9 +77,10 @@ export default function Tasks() {
           t.id === taskId ? { ...t, status: 'IN_PROGRESS' } : t
         )
       );
+      addToast('Tarea iniciada', 'info');
     } catch (err) {
       console.error('Error al iniciar tarea:', err);
-      alert("Error al mover la tarea a En curso.");
+      addToast('Error al iniciar tarea', 'error');
     }
   };
 
@@ -96,9 +100,10 @@ export default function Tasks() {
           t.id === taskId ? { ...t, status: 'TODO' } : t
         )
       );
+      addToast('Tarea pausada', 'warning');
     } catch (err) {
       console.error('Error al pausar tarea:', err);
-      alert("Error al pausar la tarea.");
+      addToast('Error al pausar tarea', 'error');
     }
   };
 
@@ -147,10 +152,11 @@ export default function Tasks() {
       setIsModalOpen(false);
       setNewTask({ title: '', description: '', priority: 'MEDIUM', dueDate: '' });
       setEditingTask(null);
+      addToast(editingTask ? 'Tarea actualizada' : 'Tarea creada', 'success');
       loadTasks();
     } catch (err) {
       console.error('Error al guardar:', err);
-      alert("Error al guardar la tarea.");
+      addToast('Error al guardar la tarea', 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -169,9 +175,10 @@ export default function Tasks() {
         setSelectedTaskId(null);
         window.dispatchEvent(new Event('taskChanged'));
       }
+      addToast('Tarea completada', 'success');
     } catch (err) {
       console.error('Error al completar:', err);
-      alert("Error al completar la tarea.");
+      addToast('Error al completar tarea', 'error');
     }
   };
 
@@ -185,9 +192,10 @@ export default function Tasks() {
         window.dispatchEvent(new Event('taskChanged'));
       }
       loadTasks();
+      addToast('Tarea eliminada', 'error');
     } catch (err) {
       console.error('Error al eliminar:', err);
-      alert("Error al eliminar la tarea.");
+      addToast('Error al eliminar tarea', 'error');
     }
   };
 

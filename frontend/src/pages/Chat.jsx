@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
+import { useToast } from '../context/ToastContext';
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
@@ -10,33 +11,27 @@ export default function Chat() {
   const subscriptionRef = useRef(null);
   const messagesEndRef = useRef(null);
 
+  const { addToast } = useToast();
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Cargar historial y conectar WebSocket UNA SOLA VEZ
   useEffect(() => {
     const rawToken = localStorage.getItem('flowwork_token');
     const token = rawToken ? rawToken.replace('Bearer ', '') : '';
 
-    // Cargar historial inicial
     fetch(`http://localhost:8082/api/chat/rooms/${taskId}/messages`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
     .then(res => res.json())
-    .then(data => {
-      console.log('Historial inicial:', data.length, 'mensajes');
-      setMessages(data);
-    })
+    .then(data => setMessages(data))
     .catch(err => console.error('Error:', err));
 
-    // Conectar WebSocket
     const client = new Client({
       webSocketFactory: () => new SockJS('http://localhost:8082/ws-chat'),
       connectHeaders: { token },
       onConnect: () => {
-        console.log('WebSocket conectado');
-        // Suscribirse a la sala inicial
         subscriptionRef.current = client.subscribe(`/topic/rooms/${taskId}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
           setMessages((prev) => {
@@ -53,26 +48,20 @@ export default function Chat() {
     stompClientRef.current = client;
 
     return () => client.deactivate();
-  }, []); // Solo al montar
+  }, []);
 
-  // Cambiar de sala cuando se selecciona otra tarea
   const changeRoom = (newTaskId) => {
     setTaskId(newTaskId);
 
-    // Cargar historial de la nueva sala
     const rawToken = localStorage.getItem('flowwork_token');
     const token = rawToken ? rawToken.replace('Bearer ', '') : '';
     fetch(`http://localhost:8082/api/chat/rooms/${newTaskId}/messages`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
     .then(res => res.json())
-    .then(data => {
-      console.log('Nuevo historial:', data.length, 'mensajes');
-      setMessages(data);
-    })
+    .then(data => setMessages(data))
     .catch(err => console.error('Error:', err));
 
-    // Cambiar suscripción
     if (subscriptionRef.current) {
       subscriptionRef.current.unsubscribe();
     }
@@ -88,7 +77,6 @@ export default function Chat() {
     }
   };
 
-  // Escuchar evento taskChanged
   useEffect(() => {
     const handler = () => {
       const newId = localStorage.getItem('selectedTaskId') || '1';
@@ -112,7 +100,7 @@ export default function Chat() {
           senderId: 'Enrique',
         }),
       });
-      console.log('Enviado a roomId:', currentTaskId);
+      addToast('Mensaje enviado', 'info');
       setInput('');
     }
   };
@@ -147,7 +135,7 @@ export default function Chat() {
         <div className="flex-1 overflow-y-auto p-6 bg-slate-50/50">
           {messages.length === 0 && (
             <div className="h-full flex items-center justify-center text-slate-400">
-              No hay mensajes aún. ¡Escribe el primero!
+              No hay mensajes aun. Escribe el primero!
             </div>
           )}
           {messages.map((msg, index) => {
