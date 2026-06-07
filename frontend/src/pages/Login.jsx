@@ -11,50 +11,52 @@ export default function Login() {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
+      e.preventDefault();
+      setError('');
 
-    if (!username.trim()) {
-      setError('El usuario es obligatorio');
-      return;
-    }
-    if (!password.trim()) {
-      setError('La contraseña es obligatoria');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const endpoint = isRegister ? 'register' : 'login';
-      const response = await fetch(`http://localhost:8084/api/auth/${endpoint}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data.message || 'Error en la solicitud');
+      if (!username.trim()) {
+        setError('El usuario es obligatorio');
+        return;
+      }
+      if (!password.trim()) {
+        setError('La contraseña es obligatoria');
+        return;
       }
 
-      const token = await response.text();
+      setLoading(true);
+      try {
+        const endpoint = isRegister ? 'register' : 'login';
+        const response = await fetch(`http://localhost:8084/api/auth/${endpoint}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password }),
+        });
 
-      if (token) {
-        localStorage.setItem('flowwork_token', `Bearer ${token}`);
-        if (rememberMe) {
-          localStorage.setItem('remembered_user', username);
-        } else {
-          localStorage.removeItem('remembered_user');
+        if (!response.ok) {
+          const data = await response.json().catch(() => ({}));
+          throw new Error(data.message || 'Error en la solicitud');
         }
-        navigate('/');
-      } else {
-        throw new Error('Token no recibido del servidor');
+
+        const data = await response.json();
+        const token = data.token;
+
+        if (token) {
+          localStorage.setItem('flowwork_token', `Bearer ${token}`);
+          localStorage.setItem('flowwork_username', data.username || username);
+          if (rememberMe) {
+            localStorage.setItem('remembered_user', username);
+          } else {
+            localStorage.removeItem('remembered_user');
+          }
+          navigate('/');
+        } else {
+          throw new Error('Token no recibido del servidor');
+        }
+      } catch (err) {
+        setError(err.message || 'Error al conectar con el servidor');
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setError(err.message || 'Error al conectar con el servidor');
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (

@@ -15,7 +15,6 @@ spring:
             allowCredentials: true
             maxAge: 3600
       routes:
-        # --- RUTAS DEL TASK SERVICE ---
         - id: task-service
           uri: lb://TASK-SERVICE
           predicates:
@@ -30,7 +29,6 @@ spring:
           filters:
             - Authentication
 
-        # --- RUTAS DE LOS OTROS SERVICIOS ---
         - id: chat-service-api
           uri: lb://chat-service
           predicates:
@@ -49,6 +47,10 @@ spring:
             - Path=/api/time/**
           filters:
             - Authentication
+
+jwt:
+  secret: Y3VzdG9taWZ5LXN1cGVyLXNlY3JldC1rZXktZm9yLWRldmVsb3BtZW50LXB1cnBvc2Vz
+  expiration: 86400000
 
 eureka:
   client:

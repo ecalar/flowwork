@@ -181,7 +181,7 @@ export default function TimeReports() {
           </div>
 
           {/* Tabla */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-x-auto">
             <table className="w-full">
               <thead className="bg-slate-50">
                 <tr>
